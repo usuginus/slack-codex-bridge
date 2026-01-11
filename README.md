@@ -11,6 +11,13 @@ Lightweight Slack bot powered by Codex. It replies to mentions and offers a `/ha
 - Slack-friendly formatting
 - Optional Slack context enrichment (channel history, members, user profile, thread)
 
+## Requirements
+
+- Node.js (LTS recommended)
+- npm
+- Codex CLI (`codex` available on PATH)
+- Slack App tokens (`SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`, `SLACK_SIGNING_SECRET`)
+
 ## Quick Start
 
 ```bash
