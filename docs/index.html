@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>codex-echo-in-slack</title>
+    <meta
+      name="description"
+      content="codex-echo-in-slack - Lightweight Slack bot for mention replies and /hangout suggestions."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header class="site-header">
+      <nav class="nav">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <img src="logo.svg" alt="" />
+          </div>
+          <div>
+            <p class="brand-title">codex-echo-in-slack</p>
+            <p class="brand-sub">
+              Lightweight mention + slash command assistant
+            </p>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#flow">Flow</a>
+          <a href="#setup">Setup</a>
+          <a href="#cta" class="cta">Get Started</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Slack × Codex</div>
+          <h1>Fast, lightweight.<br />Mentions and custom slash commands.</h1>
+          <p class="lead">
+            Keep it minimal. Use Codex CLI directly to power Slack replies and
+            flexible slash commands. Setup is just filling in your .env.
+          </p>
+          <div class="hero-actions">
+            <button class="primary" data-copy="npm install">npm install</button>
+            <button class="ghost" data-copy="npm run dev">npm run dev</button>
+          </div>
+          <div class="hero-note">
+            Socket Mode ready / Web search toggle via env
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="card-top">
+            <span>Slack Preview</span>
+            <span class="dot"></span>
+          </div>
+          <div class="message">
+            <span class="user">@you</span>
+            <p>7pm, Shibuya, 4 people, casual.</p>
+          </div>
+          <div class="message bot">
+            <span class="user">codex-echo-in-slack</span>
+            <p>
+              ✨ Command reply (example)
+              <br />1. Item One… <br />2. Item Two… <br />3. Item Three…
+            </p>
+          </div>
+          <div class="message bot">
+            <span class="user">codex-echo-in-slack</span>
+            <p>📣 Suggested message: Let’s meet at 7pm — see you there!</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-title">
+          <h2>Features</h2>
+          <p>Small footprint. Just the essentials, well designed.</p>
+        </div>
+        <div class="grid">
+          <article class="feature">
+            <h3>Mention Replies</h3>
+            <p>
+              Detects mentions and responds concisely in the user’s language.
+            </p>
+          </article>
+          <article class="feature">
+            <h3>Slash Commands</h3>
+            <p>
+              Create a custom command flow and format the response for Slack.
+            </p>
+          </article>
+          <article class="feature">
+            <h3>Context Enrichment</h3>
+            <p>
+              Optionally enriches with channel history, members, and thread
+              context.
+            </p>
+          </article>
+          <article class="feature">
+            <h3>CLI First</h3>
+            <p>Uses Codex CLI directly. Clean env-based config.</p>
+          </article>
+          <article class="feature">
+            <h3>Slack Native</h3>
+            <p>Slack-friendly formatting for readable replies.</p>
+          </article>
+          <article class="feature">
+            <h3>Safe by Design</h3>
+            <p>Retries, timeouts, and graceful fallbacks built in.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="flow" class="section flow">
+        <div class="section-title">
+          <h2>Architecture</h2>
+          <p>Three layers, easy to extend.</p>
+        </div>
+        <div class="flow-grid">
+          <div class="flow-card">
+            <h4>App</h4>
+            <p>Slack Bolt receives events and commands.</p>
+          </div>
+          <div class="flow-card">
+            <h4>Services</h4>
+            <p>Prompting, formatting, and retries live here.</p>
+          </div>
+          <div class="flow-card">
+            <h4>Integrations</h4>
+            <p>Bridges Codex CLI and Slack APIs.</p>
+          </div>
+        </div>
+        <div class="pulse">
+          <div class="pulse-node">Slack</div>
+          <div class="pulse-line"></div>
+          <div class="pulse-node">Codex CLI</div>
+        </div>
+      </section>
+
+      <section id="setup" class="section setup">
+        <div class="section-title">
+          <h2>Quick Setup</h2>
+          <p>Minimal env vars and a few commands.</p>
+        </div>
+        <div class="setup-grid">
+          <div class="setup-card">
+            <h4>Requirements</h4>
+            <ul>
+              <li>Node.js (LTS)</li>
+              <li>Codex CLI</li>
+              <li>Slack App Tokens</li>
+            </ul>
+          </div>
+          <div class="setup-card">
+            <h4>Commands</h4>
+            <pre><code>npm install
+cp .env.sample .env
+npm run build
+npm start</code></pre>
+          </div>
+          <div class="setup-card">
+            <h4>Env</h4>
+            <pre><code>SLACK_BOT_TOKEN=
+SLACK_APP_TOKEN=
+SLACK_SIGNING_SECRET=
+OPENAI_API_KEY=</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="cta" class="section cta">
+        <div class="cta-inner">
+          <h2>Bring Codex into Slack.</h2>
+          <p>Lightweight, fast, and focused. A minimal Slack AI agent.</p>
+          <div class="hero-actions">
+            <a
+              class="cta-link"
+              href="https://github.com/usuginus/codex-echo-in-slack"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© codex-echo-in-slack. Built for lightweight Slack automation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
