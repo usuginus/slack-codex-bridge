@@ -1,14 +1,14 @@
 import { WebClient } from "@slack/web-api";
 
 function slimMessages(messages, limit = 20) {
-  return (messages || [])
-    .slice(0, limit)
-    .map((m) => ({
-      user: m.user || m.bot_id || "unknown",
-      text: m.text || "",
-      ts: m.ts || "",
-      thread_ts: m.thread_ts || "",
-    }));
+  const list = messages || [];
+  const sliced = limit == null ? list : list.slice(0, limit);
+  return sliced.map((m) => ({
+    user: m.user || m.bot_id || "unknown",
+    text: m.text || "",
+    ts: m.ts || "",
+    thread_ts: m.thread_ts || "",
+  }));
 }
 
 export type SlackContext = {
@@ -93,12 +93,22 @@ export async function buildSlackContext({
 
   if (threadTs) {
     try {
-      const replies = await client.conversations.replies({
-        channel: channelId,
-        ts: threadTs,
-        limit: 20,
-      });
-      context.thread_messages = slimMessages(replies.messages, 20);
+      const allReplies = [];
+      let cursor = undefined;
+      do {
+        const replies = await client.conversations.replies({
+          channel: channelId,
+          ts: threadTs,
+          limit: 100,
+          cursor,
+        });
+        if (replies.messages?.length) {
+          allReplies.push(...replies.messages);
+        }
+        cursor = replies.response_metadata?.next_cursor || undefined;
+        if (allReplies.length >= 200) break;
+      } while (cursor);
+      context.thread_messages = slimMessages(allReplies, null);
     } catch (e) {
       context.thread_messages_error = e?.data?.error || e?.message;
     }

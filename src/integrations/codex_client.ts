@@ -29,7 +29,10 @@ export async function runCodexExec({
       args.push("-c", `model="${process.env.CODEX_MODEL}"`);
     }
     if (process.env.CODEX_REASONING_EFFORT) {
-      args.push("-c", `reasoning.effort="${process.env.CODEX_REASONING_EFFORT}"`);
+      args.push(
+        "-c",
+        `reasoning.effort="${process.env.CODEX_REASONING_EFFORT}"`
+      );
     }
     args.push(prompt);
     const child = spawn("codex", args, {
