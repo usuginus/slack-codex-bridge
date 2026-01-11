@@ -1,0 +1,26 @@
+{
+  "name": "codex-echo-in-slack",
+  "version": "1.0.0",
+  "main": "dist/app/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app/index.js",
+    "dev": "node --loader ts-node/esm src/app/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@slack/bolt": "^4.6.0",
+    "@slack/web-api": "^7.9.1",
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "type": "module"
+}
