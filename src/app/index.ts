@@ -14,7 +14,7 @@ const app = new App({
 
 const WORKDIR = process.env.CODEX_WORKDIR || process.cwd();
 
-app.command("/nomikai", async ({ command, ack, say }) => {
+app.command("/hangout", async ({ command, ack, say }) => {
   await ack();
 
   const cond = formatSearchConditions(command.text || "");
