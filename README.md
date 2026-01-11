@@ -2,7 +2,9 @@
 
 Lightweight Slack bot powered by Codex. It replies to mentions and offers a `/hangout` command for quick meetup suggestions.
 
-<img width="681" height="103" alt="image" src="https://github.com/user-attachments/assets/f2e1c997-d461-4650-bf03-b761414f2df8" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b3fea630-ec2a-4ad7-a196-9a3c343e7b69" alt="logo banner">
+</p>
 
 ## Features
 
@@ -10,6 +12,8 @@ Lightweight Slack bot powered by Codex. It replies to mentions and offers a `/ha
 - `/hangout` suggestions with 3 picks
 - Slack-friendly formatting
 - Optional Slack context enrichment (channel history, members, user profile, thread)
+
+<img width="681" height="103" alt="image" src="https://github.com/user-attachments/assets/f2e1c997-d461-4650-bf03-b761414f2df8" />
 
 ## Requirements
 
