@@ -8,7 +8,7 @@ function buildMentionPrompt(
 ) {
   return `
 You are a helpful assistant responding in a Slack channel.
-Respond naturally in English to the user's mention. Be concise and friendly.
+Respond naturally in the user's language. Be concise and friendly.
 Assume a US context unless the user specifies otherwise.
 
 User message:

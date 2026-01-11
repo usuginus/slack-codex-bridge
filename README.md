@@ -6,7 +6,7 @@ Lightweight Slack bot powered by Codex. It replies to mentions and offers a `/ha
 
 ## Features
 
-- Mention replies (concise, English-only)
+- Mention replies (concise, language-matched)
 - `/hangout` suggestions with 3 picks
 - Slack-friendly formatting
 - Optional Slack context enrichment (channel history, members, user profile, thread)
