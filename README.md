@@ -1,8 +1,8 @@
-# codex-echo-in-slack
+# slack-codex-bridge
 
 Lightweight Slack bot powered by Codex. It replies to mentions and offers a `/hangout` command for quick meetup suggestions.
 
-Project website: https://usuginus.github.io/codex-echo-in-slack/
+Project website: https://usuginus.github.io/slack-codex-bridge/
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b3fea630-ec2a-4ad7-a196-9a3c343e7b69" alt="logo banner">
