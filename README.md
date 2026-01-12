@@ -5,7 +5,7 @@ A lightweight bridge between Slack and Codex CLI. It receives Slack mentions or 
 Project website: https://usuginus.github.io/slack-codex-bridge/
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/2a361c6b-71c5-4587-851d-745ce08c98af" alt="logo banner">
+  <img src="https://github.com/user-attachments/assets/b5a278a8-3fc0-4879-a4b5-d0d749aa5bef" alt="logo banner">
 </p>
 
 ## What this is
