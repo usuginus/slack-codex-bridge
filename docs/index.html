@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>slack-codex-bridge</title>
     <meta
       name="description"
-      content="slack-codex-bridge - Lightweight Slack bot for mention replies and /hangout suggestions."
+      content="slack-codex-bridge - A lightweight Slack ↔ Codex CLI bridge for mentions and custom slash commands."
     />
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,9 +26,7 @@
           </div>
           <div>
             <p class="brand-title">slack-codex-bridge</p>
-            <p class="brand-sub">
-              Lightweight mention + slash command assistant
-            </p>
+            <p class="brand-sub">Lightweight Slack ↔ Codex CLI bridge</p>
           </div>
         </div>
         <div class="nav-links">
@@ -44,10 +42,11 @@
       <section class="hero">
         <div class="hero-copy">
           <div class="eyebrow">Slack × Codex</div>
-          <h1>Fast, lightweight.<br />Mentions and custom slash commands.</h1>
+          <h1>Fast, lightweight.<br />Slack ↔ Codex CLI bridge.</h1>
           <p class="lead">
-            Keep it minimal. Use Codex CLI directly to power Slack replies and
-            flexible slash commands. Setup is just filling in your .env.
+            Keep it minimal. Forward Slack mentions or slash commands to Codex
+            CLI, then format the response back for Slack. Setup is just filling
+            in your .env.
           </p>
           <div class="hero-actions">
             <button class="primary" data-copy="npm install">npm install</button>
@@ -64,18 +63,19 @@
           </div>
           <div class="message">
             <span class="user">@you</span>
-            <p>7pm, Shibuya, 4 people, casual.</p>
+            <p>@bot summarize this thread in 3 bullets.</p>
           </div>
           <div class="message bot">
             <span class="user">slack-codex-bridge</span>
             <p>
               ✨ Command reply (example)
-              <br />1. Item One… <br />2. Item Two… <br />3. Item Three…
+              <br />1. Summary point one… <br />2. Summary point two… <br />3.
+              Action item…
             </p>
           </div>
           <div class="message bot">
             <span class="user">slack-codex-bridge</span>
-            <p>📣 Suggested message: Let’s meet at 7pm — see you there!</p>
+            <p>📣 Suggested reply: Posted a concise summary.</p>
           </div>
         </div>
       </section>
@@ -83,7 +83,7 @@
       <section id="features" class="section">
         <div class="section-title">
           <h2>Features</h2>
-          <p>Small footprint. Just the essentials, well designed.</p>
+          <p>Minimal surface area. Just the essentials for a solid bridge.</p>
         </div>
         <div class="grid">
           <article class="feature">
@@ -95,7 +95,7 @@
           <article class="feature">
             <h3>Slash Commands</h3>
             <p>
-              Create a custom command flow and format the response for Slack.
+              Define your own command flow and format the response for Slack.
             </p>
           </article>
           <article class="feature">
@@ -179,8 +179,10 @@ OPENAI_API_KEY=</code></pre>
 
       <section id="cta" class="section cta">
         <div class="cta-inner">
-          <h2>Bring Codex into Slack.</h2>
-          <p>Lightweight, fast, and focused. A minimal Slack AI agent.</p>
+          <h2>Bridge Slack and Codex.</h2>
+          <p>
+            Lightweight, fast, and focused. A minimal Slack ↔ Codex CLI bridge.
+          </p>
           <div class="hero-actions">
             <a
               class="cta-link"
