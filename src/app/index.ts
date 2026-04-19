@@ -5,6 +5,15 @@ import { planHangout, formatSearchConditions } from "../services/hangout.js";
 import { respondMention } from "../services/mention.js";
 import { buildSlackContext } from "../integrations/slack_api.js";
 
+const MAX_USER_INPUT_LENGTH = 4000;
+
+function truncateInput(text: string): string {
+  if (text.length > MAX_USER_INPUT_LENGTH) {
+    return text.slice(0, MAX_USER_INPUT_LENGTH) + "...(truncated)";
+  }
+  return text;
+}
+
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   appToken: process.env.SLACK_APP_TOKEN,
@@ -12,12 +21,11 @@ const app = new App({
   socketMode: true,
 });
 
-const WORKDIR = process.env.CODEX_WORKDIR || process.cwd();
-
 app.command("/hangout", async ({ command, ack, say }) => {
   await ack();
 
-  const cond = formatSearchConditions(command.text || "");
+  const userInput = truncateInput(command.text || "");
+  const cond = formatSearchConditions(userInput);
   await say(`🤔 <@${command.user_id}> Working on it...\n${cond}`);
 
   const slackContext = await buildSlackContext({
@@ -27,7 +35,7 @@ app.command("/hangout", async ({ command, ack, say }) => {
   });
 
   const result = await planHangout({
-    slackText: command.text || "",
+    slackText: userInput,
     workdir: process.env.PLANNER_REPO_DIR || process.cwd(),
     slackContext,
   });
@@ -38,7 +46,7 @@ app.command("/hangout", async ({ command, ack, say }) => {
 app.event("app_mention", async ({ event, say }) => {
   if (event.bot_id) return;
 
-  const cleaned = stripBotMention(event.text);
+  const cleaned = truncateInput(stripBotMention(event.text));
   if (!cleaned) {
     await say({
       text: `<@${event.user}> How can I help?`,
@@ -68,3 +76,16 @@ app.event("app_mention", async ({ event, say }) => {
 
 await app.start();
 console.log("⚡️ slack bot is running (Socket Mode)");
+
+async function shutdown(signal: string) {
+  console.log(`\n${signal} received. Shutting down...`);
+  try {
+    await app.stop();
+  } catch {
+    // Ignore errors during shutdown.
+  }
+  process.exit(0);
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
