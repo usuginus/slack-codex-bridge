@@ -1,6 +1,6 @@
 # slack-codex-bridge
 
-A lightweight bridge between Slack and Codex CLI. It receives Slack mentions or slash commands, forwards them to Codex, and formats the response back for Slack. The goal is a minimal, dependable bridge first — a bot is just one possible use.
+A lightweight bridge between Slack and Codex CLI. It receives Slack mentions or slash commands, forwards them to Codex, and posts the response directly to Slack. The goal is a minimal, dependable bridge first — a bot is just one possible use.
 
 Project website: https://usuginus.github.io/slack-codex-bridge/
 
@@ -11,15 +11,17 @@ Project website: https://usuginus.github.io/slack-codex-bridge/
 ## What this is
 
 - Slack → Codex CLI → Slack response pipeline
-- Simple prompt + formatting layer
+- Prompts instruct Codex to output Slack mrkdwn directly — no post-processing
 - Optional Slack context enrichment
 
 ## Features
 
 - Mention replies (concise, language-matched)
-- Custom slash command flow (you define the prompt)
-- Slack-friendly formatting
-- Optional Slack context enrichment (channel history, members, user profile, thread)
+- Slash commands with named or positional parameters
+- Codex outputs Slack mrkdwn directly (no formatting layer)
+- Slack context enrichment (channel history, members, user profile, thread)
+- Input truncation and prompt length limits for safety
+- Graceful shutdown (SIGTERM/SIGINT)
 
 <img width="681" height="103" alt="image" src="https://github.com/user-attachments/assets/f2e1c997-d461-4650-bf03-b761414f2df8" />
 
@@ -37,6 +39,15 @@ npm install
 cp .env.sample .env
 npm run build
 npm start
+```
+
+## Slash Command Usage
+
+The `/hangout` command supports both positional and named parameters:
+
+```
+/hangout Downtown 40 4 7:30pm
+/hangout area:Downtown budget:40 people:4 time:7:30pm
 ```
 
 ## Configuration
@@ -75,17 +86,28 @@ See `.env.sample` for examples.
 
 ## Architecture
 
+TypeScript strict mode (`strict: true`, ES2022, NodeNext).
+
 ```
 src/
-  app/                 # Slack entrypoint
-  services/            # Prompting + formatting
-  integrations/        # Slack API + Codex CLI + sanitizers
+  app/
+    index.ts                  # Slack Bolt entrypoint (Socket Mode)
+  services/
+    hangout.ts                # /hangout command service
+    mention.ts                # @mention response service
+    diagnostics.ts            # Shared error diagnostics
+  integrations/
+    codex_client.ts           # Codex CLI process spawner
+    slack_api.ts              # Slack context collector
+    slack_formatters.ts       # Bot mention stripping
 ```
 
 ## Development
 
 ```bash
-npm run dev
+npm run dev               # start with ts-node
+npm test                  # run vitest
+npx tsc --noEmit          # type check
 ```
 
 ## VM / Server Notes

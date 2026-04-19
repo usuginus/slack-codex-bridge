@@ -10,6 +10,8 @@ export type ExecError = Error & {
   stderr?: string;
 };
 
+const MAX_PROMPT_LENGTH = 16000;
+
 export async function runCodexExec({
   prompt,
   cwd,
@@ -19,6 +21,11 @@ export async function runCodexExec({
   cwd: string;
   timeoutMs?: number;
 }): Promise<ExecResult> {
+  const truncatedPrompt =
+    prompt.length > MAX_PROMPT_LENGTH
+      ? prompt.slice(0, MAX_PROMPT_LENGTH) + "\n...(truncated)"
+      : prompt;
+
   return await new Promise<ExecResult>((resolve, reject) => {
     const args = ["exec", "--skip-git-repo-check"];
     const webSearch = process.env.CODEX_WEB_SEARCH;
@@ -34,7 +41,7 @@ export async function runCodexExec({
         `reasoning.effort="${process.env.CODEX_REASONING_EFFORT}"`
       );
     }
-    args.push(prompt);
+    args.push(truncatedPrompt);
     const child = spawn("codex", args, {
       cwd,
       env: {
