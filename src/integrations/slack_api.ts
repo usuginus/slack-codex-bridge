@@ -1,6 +1,24 @@
 import { WebClient } from "@slack/web-api";
 
-function slimMessages(messages, limit = 20) {
+type SlackMessage = {
+  user?: string;
+  bot_id?: string;
+  text?: string;
+  ts?: string;
+  thread_ts?: string;
+};
+
+type SlimMessage = {
+  user: string;
+  text: string;
+  ts: string;
+  thread_ts: string;
+};
+
+function slimMessages(
+  messages: SlackMessage[] | undefined,
+  limit: number | null = 20
+): SlimMessage[] {
   const list = messages || [];
   const sliced = limit == null ? list : list.slice(0, limit);
   return sliced.map((m) => ({
@@ -9,6 +27,20 @@ function slimMessages(messages, limit = 20) {
     ts: m.ts || "",
     thread_ts: m.thread_ts || "",
   }));
+}
+
+function getErrorMessage(e: unknown): string {
+  if (e && typeof e === "object") {
+    const obj = e as Record<string, unknown>;
+    if (obj.data && typeof obj.data === "object") {
+      const data = obj.data as Record<string, unknown>;
+      if (typeof data.error === "string") return data.error;
+    }
+    if ("message" in obj && typeof obj.message === "string") {
+      return obj.message;
+    }
+  }
+  return String(e);
 }
 
 export type SlackContext = {
@@ -61,8 +93,8 @@ export async function buildSlackContext({
       limit: 20,
     });
     context.recent_messages = slimMessages(history.messages, 20);
-  } catch (e) {
-    context.recent_messages_error = e?.data?.error || e?.message;
+  } catch (e: unknown) {
+    context.recent_messages_error = getErrorMessage(e);
   }
 
   try {
@@ -71,8 +103,8 @@ export async function buildSlackContext({
       limit: 50,
     });
     context.channel_members = (members.members || []).slice(0, 50);
-  } catch (e) {
-    context.channel_members_error = e?.data?.error || e?.message;
+  } catch (e: unknown) {
+    context.channel_members_error = getErrorMessage(e);
   }
 
   if (userId) {
@@ -86,16 +118,18 @@ export async function buildSlackContext({
         display_name: profile.display_name,
         title: profile.title,
       };
-    } catch (e) {
-      context.request_user_error = e?.data?.error || e?.message;
+    } catch (e: unknown) {
+      context.request_user_error = getErrorMessage(e);
     }
   }
 
   if (threadTs) {
     try {
-      const allReplies = [];
-      let cursor = undefined;
+      const allReplies: SlackMessage[] = [];
+      let cursor: string | undefined = undefined;
+      const deadline = Date.now() + 10000; // 10s timeout for thread fetching
       do {
+        if (Date.now() > deadline) break;
         const replies = await client.conversations.replies({
           channel: channelId,
           ts: threadTs,
@@ -109,8 +143,8 @@ export async function buildSlackContext({
         if (allReplies.length >= 200) break;
       } while (cursor);
       context.thread_messages = slimMessages(allReplies, null);
-    } catch (e) {
-      context.thread_messages_error = e?.data?.error || e?.message;
+    } catch (e: unknown) {
+      context.thread_messages_error = getErrorMessage(e);
     }
   }
 

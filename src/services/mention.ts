@@ -1,6 +1,6 @@
 import { runCodexExec, type ExecError } from "../integrations/codex_client.js";
-import { toSlackMarkdown } from "../integrations/slack_formatters.js";
 import { type SlackContext } from "../integrations/slack_api.js";
+import { diagnoseFailure } from "./diagnostics.js";
 
 function buildMentionPrompt(
   slackText: string,
@@ -18,39 +18,15 @@ Slack context (JSON, if available):
 ${JSON.stringify(slackContext || null)}
 
 Rules:
+- Your response will be posted directly to Slack. Use Slack mrkdwn format:
+  - Bold: *text*
+  - Italic: _text_
+  - Code: \`code\` or \`\`\`code block\`\`\`
+  - Links: <https://url|display text>
+  - Lists: use bullet character "•"
+- Do NOT use standard Markdown (no **bold**, no [link](url), no # headings).
 - URLs are allowed if relevant.
 `.trim();
-}
-
-function formatMentionReply(text: string): string {
-  let out = toSlackMarkdown(text);
-  // Remove empty parentheses left behind by link stripping.
-  out = out.replace(/\s*\(\s*\)\s*/g, " ");
-  // Ensure numbered lists start on a new line.
-  out = out.replace(/\s(\d+)\)/g, "\n$1)");
-  // Ensure bullet points start on a new line.
-  out = out.replace(/\s•/g, "\n•");
-  // Collapse excessive newlines.
-  out = out.replace(/\n{3,}/g, "\n\n");
-  return out.trim();
-}
-
-function diagnoseFailure(err: ExecError) {
-  const msg = `${err?.message ?? ""}\n${err?.stderr ?? ""}`.toLowerCase();
-  if (msg.includes("enoent") || msg.includes("spawn codex")) {
-    return "Codex CLI not found. Make sure `codex` is installed and on PATH.";
-  }
-  if (
-    msg.includes("login") ||
-    msg.includes("not logged in") ||
-    msg.includes("auth")
-  ) {
-    return "Codex CLI authentication required. Run `codex login` and try again.";
-  }
-  if (msg.includes("timed out")) {
-    return "Codex timed out. Shorten the request or increase the timeout.";
-  }
-  return "Codex execution failed. Check server stderr for details.";
 }
 
 export async function respondMention({
@@ -65,7 +41,7 @@ export async function respondMention({
   const prompt = buildMentionPrompt(slackText, slackContext);
   try {
     const { stdout } = await runCodexExec({ prompt, cwd: workdir });
-    const text = formatMentionReply((stdout || "").trim());
+    const text = (stdout || "").trim();
     if (!text) {
       throw new Error("Empty response from codex.");
     }
