@@ -6,7 +6,7 @@
     "build": "tsc",
     "start": "node dist/app/index.js",
     "dev": "node --loader ts-node/esm src/app/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,8 @@
   "devDependencies": {
     "@types/node": "^22.13.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.4"
   },
   "type": "module"
 }
